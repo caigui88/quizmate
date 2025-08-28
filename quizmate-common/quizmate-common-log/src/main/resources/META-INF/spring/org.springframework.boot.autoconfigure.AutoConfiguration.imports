@@ -1,0 +1,2 @@
+com.quizmate.common.log.service.AsyncLogService
+com.quizmate.common.log.aspect.LogAspect
