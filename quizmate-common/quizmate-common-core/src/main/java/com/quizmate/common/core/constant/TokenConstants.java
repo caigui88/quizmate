@@ -2,11 +2,10 @@ package com.quizmate.common.core.constant;
 
 /**
  * Token的Key常量
- * 
+ *
  * @author moru
  */
-public class TokenConstants
-{
+public class TokenConstants {
     /**
      * 令牌前缀
      */

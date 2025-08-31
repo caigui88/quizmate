@@ -9,28 +9,6 @@ x-healthcheck-curl: &hc_curl
   start_period: 30s
 
 services:
-  quizmate-nacos:
-    container_name: quizmate-nacos
-    image: nacos/nacos-server:v2.2.0
-    build:
-      context: ./nacos
-    environment:
-      - MODE=standalone
-    volumes:
-      - ./nacos/logs/:/home/nacos/logs
-      - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
-    ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9849:9849"
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -fsS http://localhost:8848/nacos/index.html >/dev/null" ]
-      interval: 10s
-      timeout: 5s
-      retries: 20
-      start_period: 30s
-    depends_on:
-      - quizmate-mysql
   quizmate-mysql:
     container_name: quizmate-mysql
     image: mysql:8.0
@@ -77,7 +55,28 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-
+  quizmate-nacos:
+    container_name: quizmate-nacos
+    image: nacos/nacos-server:v2.2.0
+    build:
+      context: ./nacos
+    environment:
+      - MODE=standalone
+    volumes:
+      - ./nacos/logs/:/home/nacos/logs
+      - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8848/nacos/index.html >/dev/null" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    depends_on:
+      - quizmate-mysql
 #  quizmate-nginx:
 #    container_name: quizmate-nginx
 #    image: nginx

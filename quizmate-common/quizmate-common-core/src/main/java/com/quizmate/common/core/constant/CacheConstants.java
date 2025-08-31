@@ -2,11 +2,10 @@ package com.quizmate.common.core.constant;
 
 /**
  * 缓存常量信息
- * 
+ *
  * @author moru
  */
-public class CacheConstants
-{
+public class CacheConstants {
     /**
      * 缓存有效期，默认720（分钟）
      */

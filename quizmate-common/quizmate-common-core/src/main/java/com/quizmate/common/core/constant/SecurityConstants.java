@@ -2,11 +2,10 @@ package com.quizmate.common.core.constant;
 
 /**
  * 权限相关通用常量
- * 
+ *
  * @author moru
  */
-public class SecurityConstants
-{
+public class SecurityConstants {
     /**
      * 用户ID字段
      */

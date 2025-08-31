@@ -2,11 +2,10 @@ package com.quizmate.common.core.constant;
 
 /**
  * 返回状态码
- * 
+ *
  * @author moru
  */
-public class HttpStatus
-{
+public class HttpStatus {
     /**
      * 操作成功
      */

@@ -16,13 +16,7 @@
     </description>
 
     <dependencies>
-		
-        <!-- quizmate Common Core-->
-        <dependency>
-            <groupId>com.quizmate</groupId>
-            <artifactId>quizmate-common-core</artifactId>
-        </dependency>
-        
+
     </dependencies>
 
 </project>

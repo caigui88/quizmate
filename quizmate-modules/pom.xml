@@ -12,8 +12,13 @@
         <module>quizmate-system</module>
         <module>quizmate-gen</module>
         <module>quizmate-job</module>
-        <module>quizmate-file</module>
-        <module>quizmate-question</module>
+        <module>file-service</module>
+        <module>question-service</module>
+        <module>user-service</module>
+        <module>questionBank-service</module>
+        <module>interaction-service</module>
+        <module>mockInterview-service</module>
+        <module>search-service</module>
     </modules>
 
     <artifactId>quizmate-modules</artifactId>

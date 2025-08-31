@@ -10,6 +10,7 @@
 
     <modules>
         <module>quizmate-api-system</module>
+        <module>quizmate-api-custom</module>
     </modules>
 
     <artifactId>quizmate-api</artifactId>
@@ -18,5 +19,13 @@
     <description>
         quizmate-api系统接口
     </description>
+
+    <dependencies>
+        <!-- quizmate Common Core-->
+        <dependency>
+            <groupId>com.quizmate</groupId>
+            <artifactId>quizmate-common-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

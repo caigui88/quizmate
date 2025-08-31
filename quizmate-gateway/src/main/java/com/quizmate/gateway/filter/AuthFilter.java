@@ -22,13 +22,13 @@ import io.jsonwebtoken.Claims;
 import reactor.core.publisher.Mono;
 
 /**
- * 网关鉴权
- * 
+ * 网关认证过滤器
+ * 通过过滤器注册统一认证组件
+ *
  * @author moru
  */
 @Component
-public class AuthFilter implements GlobalFilter, Ordered
-{
+public class AuthFilter implements GlobalFilter, Ordered {
     private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
     // 排除过滤的 uri 地址，nacos自行添加
@@ -40,37 +40,34 @@ public class AuthFilter implements GlobalFilter, Ordered
 
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain)
-    {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpRequest.Builder mutate = request.mutate();
 
         String url = request.getURI().getPath();
         // 跳过不需要验证的路径
-        if (StringUtils.matches(url, ignoreWhite.getWhites()))
-        {
+        // 白名单当中不需要校验的路径
+        if (StringUtils.matches(url, ignoreWhite.getWhites())) {
+            // 匹配成功直接返回
             return chain.filter(exchange);
         }
         String token = getToken(request);
-        if (StringUtils.isEmpty(token))
-        {
+        if (StringUtils.isEmpty(token)) {
+            // 令牌为空，说明不是一个合法的请求
             return unauthorizedResponse(exchange, "令牌不能为空");
         }
-        Claims claims = JwtUtils.parseToken(token);
-        if (claims == null)
-        {
+        Claims claims = JwtUtils.parseToken(token); // 解析出令牌的内容
+        if (claims == null) {
             return unauthorizedResponse(exchange, "令牌已过期或验证不正确！");
         }
         String userkey = JwtUtils.getUserKey(claims);
         boolean islogin = redisService.hasKey(getTokenKey(userkey));
-        if (!islogin)
-        {
+        if (!islogin) {
             return unauthorizedResponse(exchange, "登录状态已过期");
         }
         String userid = JwtUtils.getUserId(claims);
         String username = JwtUtils.getUserName(claims);
-        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username))
-        {
+        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username)) {
             return unauthorizedResponse(exchange, "令牌验证失败");
         }
 
@@ -83,10 +80,8 @@ public class AuthFilter implements GlobalFilter, Ordered
         return chain.filter(exchange.mutate().request(mutate.build()).build());
     }
 
-    private void addHeader(ServerHttpRequest.Builder mutate, String name, Object value)
-    {
-        if (value == null)
-        {
+    private void addHeader(ServerHttpRequest.Builder mutate, String name, Object value) {
+        if (value == null) {
             return;
         }
         String valueStr = value.toString();
@@ -94,13 +89,11 @@ public class AuthFilter implements GlobalFilter, Ordered
         mutate.header(name, valueEncode);
     }
 
-    private void removeHeader(ServerHttpRequest.Builder mutate, String name)
-    {
+    private void removeHeader(ServerHttpRequest.Builder mutate, String name) {
         mutate.headers(httpHeaders -> httpHeaders.remove(name)).build();
     }
 
-    private Mono<Void> unauthorizedResponse(ServerWebExchange exchange, String msg)
-    {
+    private Mono<Void> unauthorizedResponse(ServerWebExchange exchange, String msg) {
         log.error("[鉴权异常处理]请求路径:{},错误信息:{}", exchange.getRequest().getPath(), msg);
         return ServletUtils.webFluxResponseWriter(exchange.getResponse(), msg, HttpStatus.UNAUTHORIZED);
     }
@@ -108,28 +101,24 @@ public class AuthFilter implements GlobalFilter, Ordered
     /**
      * 获取缓存key
      */
-    private String getTokenKey(String token)
-    {
+    private String getTokenKey(String token) {
         return CacheConstants.LOGIN_TOKEN_KEY + token;
     }
 
     /**
      * 获取请求token
      */
-    private String getToken(ServerHttpRequest request)
-    {
+    private String getToken(ServerHttpRequest request) {
         String token = request.getHeaders().getFirst(SecurityConstants.AUTHORIZATION_HEADER);
         // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
-        {
+        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX)) {
             token = token.replaceFirst(TokenConstants.PREFIX, StringUtils.EMPTY);
         }
         return token;
     }
 
     @Override
-    public int getOrder()
-    {
+    public int getOrder() {
         return -200;
     }
 }
