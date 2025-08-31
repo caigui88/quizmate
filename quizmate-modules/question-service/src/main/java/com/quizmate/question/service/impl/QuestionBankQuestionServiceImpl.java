@@ -10,7 +10,7 @@ import com.quizmate.common.core.constant.CommonConstant;
 import com.quizmate.common.core.constant.ErrorCode;
 import com.quizmate.common.core.exception.BusinessException;
 import com.quizmate.common.core.utils.ThrowUtils;
-import com.quizmate.custom.api.model.CustomUser;
+import com.quizmate.custom.api.model.UserDTO;
 import com.quizmate.question.domain.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import com.quizmate.question.domain.entity.Question;
 import com.quizmate.question.domain.entity.QuestionBank;
@@ -145,7 +145,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         // region 可选
         // 1. 关联查询用户信息
         Long userId = questionBankQuestion.getUserId();
-        CustomUser user = null;
+        UserDTO user = null;
         if (userId != null && userId > 0) {
             user = userService.getById(userId);
         }
@@ -179,12 +179,12 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         // region 可选
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionBankQuestionList.stream().map(QuestionBankQuestion::getUserId).collect(Collectors.toSet());
-        Map<Long, List<CustomUser>> userIdUserListMap = userService.listByIds(userIdSet).stream()
-                .collect(Collectors.groupingBy(CustomUser::getId));
+        Map<Long, List<UserDTO>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+                .collect(Collectors.groupingBy(UserDTO::getId));
         // 填充信息
         questionBankQuestionVOList.forEach(questionBankQuestionVO -> {
             Long userId = questionBankQuestionVO.getUserId();
-            CustomUser user = null;
+            UserDTO user = null;
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
@@ -204,7 +204,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
      * @param loginUser
      */
     @Override
-    public void batchAddQuestionToBank(List<Long> questionIdList, long questionBankId, CustomUser loginUser) {
+    public void batchAddQuestionToBank(List<Long> questionIdList, long questionBankId, UserDTO loginUser) {
         // 参数校验
         ThrowUtils.throwIf(CollUtil.isEmpty(questionIdList), ErrorCode.PARAMS_ERROR, "题目列表不能为空");
         ThrowUtils.throwIf(questionBankId <= 0, ErrorCode.PARAMS_ERROR, "题库 id 非法");
@@ -277,7 +277,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     }
 
     @Override
-    public void batchAddQuestionsToBank(List<Long> questionIdList, long questionBankId, CustomUser loginUser) {
+    public void batchAddQuestionsToBank(List<Long> questionIdList, long questionBankId, UserDTO loginUser) {
         ThrowUtils.throwIf(CollUtil.isEmpty(questionIdList), ErrorCode.PARAMS_ERROR, "题目列表不能为空");
         ThrowUtils.throwIf(questionBankId <= 0, ErrorCode.PARAMS_ERROR, "题库 id 非法");
         ThrowUtils.throwIf(loginUser == null, ErrorCode.NOT_LOGIN_ERROR);

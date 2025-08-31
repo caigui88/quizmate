@@ -21,6 +21,8 @@
     </description>
 
     <dependencies>
+
+        <!-- 内部服务依赖 -->
         <!-- quizmate Common Core-->
         <dependency>
             <groupId>com.quizmate</groupId>

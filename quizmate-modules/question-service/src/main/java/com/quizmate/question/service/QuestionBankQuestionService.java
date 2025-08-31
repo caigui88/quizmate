@@ -3,7 +3,7 @@ package com.quizmate.question.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.quizmate.custom.api.model.CustomUser;
+import com.quizmate.custom.api.model.UserDTO;
 import com.quizmate.question.domain.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import com.quizmate.question.domain.entity.QuestionBankQuestion;
 import com.quizmate.question.domain.vo.QuestionBankQuestionVO;
@@ -58,7 +58,7 @@ public interface QuestionBankQuestionService extends IService<QuestionBankQuesti
      * @param questionBankId
      * @param loginUser
      */
-    void batchAddQuestionsToBank(List<Long> questionIdList, long questionBankId, CustomUser loginUser);
+    void batchAddQuestionsToBank(List<Long> questionIdList, long questionBankId, UserDTO loginUser);
 
     /**
      * 批量从题库移除题目

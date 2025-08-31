@@ -256,6 +256,13 @@
                 <version>${quizmate.version}</version>
             </dependency>
 
+            <!-- 业务接口 -->
+            <dependency>
+                <groupId>com.quizmate</groupId>
+                <artifactId>quizmate-api-custom</artifactId>
+                <version>${quizmate.version}</version>
+            </dependency>
+
             <!-- mybatis-plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>

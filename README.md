@@ -11,43 +11,57 @@
 
 ## 平台简介
 
-若依是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+基于 ruoyi-cloud 进行二次开发，以若依原有的后台系统作为微服务的管理端，面试鸭作为核心业务模块，提供了一个完整的分布式微服务解决方案。
 
-* 采用前后端分离的模式，微服务版本前端(基于 [quizmate-Vue](https://gitee.com/y_project/quizmate-Vue))。
 * 后端采用Spring Boot、Spring Cloud & Alibaba。
 * 注册中心、配置中心选型Nacos，权限认证使用Redis。
 * 流量控制框架选型Sentinel，分布式事务选型Seata。
-* 提供了技术栈（[Vue3](https://v3.cn.vuejs.org) [Element Plus](https://element-plus.org/zh-CN) [Vite](https://cn.vitejs.dev)）版本[quizmate-Cloud-Vue3](https://gitcode.com/yangzongzhuan/quizmate-Cloud-Vue3)，保持同步更新。
-* 如需不分离应用，请移步 [quizmate](https://gitee.com/y_project/quizmate)，如需分离应用，请移步 [quizmate-Vue](https://gitee.com/y_project/quizmate-Vue)
-* 阿里云优惠券：[点我进入](http://aly.quizmate.vip)，腾讯云优惠券：[点我进入](http://txy.quizmate.vip)&nbsp;&nbsp;
 
 ## 系统模块
 
 ~~~
-com.quizmate     
-├── quizmate-ui              // 前端框架 [80]
-├── quizmate-gateway         // 网关模块 [8080]
-├── quizmate-auth            // 认证中心 [9200]
-├── quizmate-api             // 接口模块
-│       └── quizmate-api-system                          // 系统接口
-├── quizmate-common          // 通用模块
-│       └── quizmate-common-core                         // 核心模块
-│       └── quizmate-common-datascope                    // 权限范围
-│       └── quizmate-common-datasource                   // 多数据源
-│       └── quizmate-common-log                          // 日志记录
-│       └── quizmate-common-redis                        // 缓存服务
-│       └── quizmate-common-seata                        // 分布式事务
-│       └── quizmate-common-security                     // 安全模块
-│       └── quizmate-common-sensitive                    // 数据脱敏
-│       └── quizmate-common-swagger                      // 系统接口
-├── quizmate-modules         // 业务模块
-│       └── quizmate-system                              // 系统模块 [9201]
-│       └── quizmate-gen                                 // 代码生成 [9202]
-│       └── quizmate-job                                 // 定时任务 [9203]
-│       └── quizmate-file                                // 文件服务 [9300]
-├── quizmate-visual          // 图形化管理模块
-│       └── quizmate-visual-monitor                      // 监控中心 [9100]
-├──pom.xml                // 公共依赖
+com.quizmate/
+    ├── sql/    数据库初始化脚本
+    ├── docker/ docker 部署脚本
+    │   ├── mysql/
+    │   ├── nacos/
+    │   ├── nginx/
+    │   ├── redis/
+    │   ├── quizmate/
+    │   └── docker-compose.yml
+    ├── pom.xml 项目公共依赖统一管理 root pom
+    ├── README.md   项目介绍
+    ├── quizmate-ui/    前端 ui 模块
+    │   └── package.json
+    ├── quizmate-api/   微服务 API 模块
+    │   ├── quizmate-api-custom/    业务端 api 接口模块
+    │   └── quizmate-api-system/    后台端 api 接口模块
+    ├── quizmate-auth/  统一鉴权模块
+    ├── quizmate-common/    公共基础服务模块
+    │   ├── quizmate-common-core/   核心工具类
+    │   ├── quizmate-common-datascope/  数据权限校验
+    │   ├── quizmate-common-datasource/ 数据源操作
+    │   ├── quizmate-common-log/    日志记录
+    │   ├── quizmate-common-redis/  redis 调用
+    │   ├── quizmate-common-seata/  seata 分布式事务    
+    │   ├── quizmate-common-security/   spring security 权限框架
+    │   ├── quizmate-common-sensitive/  数据脱敏过滤
+    │   └── quizmate-common-swagger/    项目 API 文档
+    ├── quizmate-visual/
+    │   └── quizmate-monitor/   系统服务监控模块
+    ├── quizmate-gateway/   网关模块
+    └── quizmate-modules/   实际业务模块
+        ├── quizmate-gen/
+        ├── quizmate-job/
+        ├── quizmate-system/
+        ├── file-service/   文件服务
+        ├── user-service/   业务端用户服务
+        ├── search-service/ 搜索服务
+        ├── question-service/   题目服务
+        ├── questionBank-service/   题库服务
+        ├── interaction-service/    互动服务
+        └── mockInterview-service/  AI 面试服务
+
 ~~~
 
 ## 架构图
@@ -56,15 +70,15 @@ com.quizmate
 
 ## 内置功能
 
-1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
-2.  部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。
-3.  岗位管理：配置系统用户所属担任职务。
-4.  菜单管理：配置系统菜单，操作权限，按钮权限标识等。
-5.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
-6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
-7.  参数管理：对系统动态配置常用参数。
-8.  通知公告：系统通知公告信息发布维护。
-9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
+1. 用户管理：用户是系统操作者，该功能主要完成系统用户配置。
+2. 部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。
+3. 岗位管理：配置系统用户所属担任职务。
+4. 菜单管理：配置系统菜单，操作权限，按钮权限标识等。
+5. 角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
+6. 字典管理：对系统中经常使用的一些较为固定的数据进行维护。
+7. 参数管理：对系统动态配置常用参数。
+8. 通知公告：系统通知公告信息发布维护。
+9. 操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
 10. 登录日志：系统登录日志记录查询包含登录异常。
 11. 在线用户：当前系统中活跃用户状态监控。
 12. 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。
@@ -76,7 +90,7 @@ com.quizmate
 
 ## 在线体验
 
-- admin/admin123  
+- admin/admin123
 - 陆陆续续收到一些打赏，为了更好的体验已用于演示服务器升级。谢谢各位小伙伴。
 
 演示地址：http://quizmate.vip  
@@ -123,7 +137,7 @@ com.quizmate
     </tr>
 </table>
 
-
 ## 若依微服务交流群
 
-QQ群： [![加入QQ群](https://img.shields.io/badge/已满-42799195-blue.svg)](https://jq.qq.com/?_wv=1027&k=yqInfq0S) [![加入QQ群](https://img.shields.io/badge/已满-170157040-blue.svg)](https://jq.qq.com/?_wv=1027&k=Oy1mb3p8) [![加入QQ群](https://img.shields.io/badge/已满-130643120-blue.svg)](https://jq.qq.com/?_wv=1027&k=rvxkJtXK) [![加入QQ群](https://img.shields.io/badge/已满-225920371-blue.svg)](https://jq.qq.com/?_wv=1027&k=0Ck3PvTe) [![加入QQ群](https://img.shields.io/badge/已满-201705537-blue.svg)](https://jq.qq.com/?_wv=1027&k=FnHHP4TT) [![加入QQ群](https://img.shields.io/badge/已满-236543183-blue.svg)](https://jq.qq.com/?_wv=1027&k=qdT1Ojpz) [![加入QQ群](https://img.shields.io/badge/已满-213618602-blue.svg)](https://jq.qq.com/?_wv=1027&k=nw3OiyXs) [![加入QQ群](https://img.shields.io/badge/已满-148794840-blue.svg)](https://jq.qq.com/?_wv=1027&k=kiU5WDls) [![加入QQ群](https://img.shields.io/badge/已满-118752664-blue.svg)](https://jq.qq.com/?_wv=1027&k=MtBy6YfT) [![加入QQ群](https://img.shields.io/badge/已满-101038945-blue.svg)](https://jq.qq.com/?_wv=1027&k=FqImHgH2) [![加入QQ群](https://img.shields.io/badge/已满-128355254-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=G4jZ4EtdT50PhnMBudTnEwgonxkXOscJ&authKey=FkGHYfoTKlGE6wHdKdjH9bVoOgQjtLP9WM%2Fj7pqGY1msoqw9uxDiBo39E2mLgzYg&noverify=0&group_code=128355254) [![加入QQ群](https://img.shields.io/badge/已满-179219821-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=irnwcXhbLOQEv1g-TwGifjNTA_f4wZiA&authKey=4bpzEwhcUY%2FvsPDHvzYn6xfoS%2FtOArvZ%2BGXzfr7O0%2FEqLfkKA%2BuCDXlzHIFg8t93&noverify=0&group_code=179219821) [![加入QQ群](https://img.shields.io/badge/已满-158753145-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=lx1uEdEDuxeM7rUvF3qmlFdqKqdJ5Z-R&authKey=rgyPW9yhhh4IIURKVFa6NgP3qiqH04WAzrJ0trsgkr3pjzm6sKIOGyA58oOjoj%2FJ&noverify=0&group_code=158753145) [![加入QQ群](https://img.shields.io/badge/112869560-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Kuaw0Xdlw2Nlgn6s8h9elzuquHGxGObD&authKey=cSrQcWQ%2BzQZAFFrwxaR%2BbzcumX4WRduZnd1O6JO1dlclQMiu%2BKwxAy8t2JfNp67V&noverify=0&group_code=112869560) 点击按钮入群。
+QQ群： [![加入QQ群](https://img.shields.io/badge/已满-42799195-blue.svg)](https://jq.qq.com/?_wv=1027&k=yqInfq0S) [![加入QQ群](https://img.shields.io/badge/已满-170157040-blue.svg)](https://jq.qq.com/?_wv=1027&k=Oy1mb3p8) [![加入QQ群](https://img.shields.io/badge/已满-130643120-blue.svg)](https://jq.qq.com/?_wv=1027&k=rvxkJtXK) [![加入QQ群](https://img.shields.io/badge/已满-225920371-blue.svg)](https://jq.qq.com/?_wv=1027&k=0Ck3PvTe) [![加入QQ群](https://img.shields.io/badge/已满-201705537-blue.svg)](https://jq.qq.com/?_wv=1027&k=FnHHP4TT) [![加入QQ群](https://img.shields.io/badge/已满-236543183-blue.svg)](https://jq.qq.com/?_wv=1027&k=qdT1Ojpz) [![加入QQ群](https://img.shields.io/badge/已满-213618602-blue.svg)](https://jq.qq.com/?_wv=1027&k=nw3OiyXs) [![加入QQ群](https://img.shields.io/badge/已满-148794840-blue.svg)](https://jq.qq.com/?_wv=1027&k=kiU5WDls) [![加入QQ群](https://img.shields.io/badge/已满-118752664-blue.svg)](https://jq.qq.com/?_wv=1027&k=MtBy6YfT) [![加入QQ群](https://img.shields.io/badge/已满-101038945-blue.svg)](https://jq.qq.com/?_wv=1027&k=FqImHgH2) [![加入QQ群](https://img.shields.io/badge/已满-128355254-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=G4jZ4EtdT50PhnMBudTnEwgonxkXOscJ&authKey=FkGHYfoTKlGE6wHdKdjH9bVoOgQjtLP9WM%2Fj7pqGY1msoqw9uxDiBo39E2mLgzYg&noverify=0&group_code=128355254) [![加入QQ群](https://img.shields.io/badge/已满-179219821-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=irnwcXhbLOQEv1g-TwGifjNTA_f4wZiA&authKey=4bpzEwhcUY%2FvsPDHvzYn6xfoS%2FtOArvZ%2BGXzfr7O0%2FEqLfkKA%2BuCDXlzHIFg8t93&noverify=0&group_code=179219821) [![加入QQ群](https://img.shields.io/badge/已满-158753145-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=lx1uEdEDuxeM7rUvF3qmlFdqKqdJ5Z-R&authKey=rgyPW9yhhh4IIURKVFa6NgP3qiqH04WAzrJ0trsgkr3pjzm6sKIOGyA58oOjoj%2FJ&noverify=0&group_code=158753145) [![加入QQ群](https://img.shields.io/badge/112869560-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Kuaw0Xdlw2Nlgn6s8h9elzuquHGxGObD&authKey=cSrQcWQ%2BzQZAFFrwxaR%2BbzcumX4WRduZnd1O6JO1dlclQMiu%2BKwxAy8t2JfNp67V&noverify=0&group_code=112869560)
+点击按钮入群。

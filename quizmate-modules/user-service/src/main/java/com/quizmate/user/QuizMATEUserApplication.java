@@ -22,5 +22,4 @@ public class QuizMATEUserApplication {
                 "  \\__\\_\\  \\___/  |___| /____| |_|  |_| /_/   \\_\\   |_|   |_____|\n" +
                 "                                 ");
     }
-
 }
